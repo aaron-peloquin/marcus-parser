@@ -1,14 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 
-import Dropzone from './../atoms/Dropzone'
+import Dropzone from 'react-dropzone'
 import DataTable from './../organisms/DataTable'
 
 const HomeLayout = ({}) => {
   const [fileData, setFileData] = useState()
+  const onDrop = useCallback(acceptedFiles => {
+    console.log({ acceptedFiles })
+    setFileData('hi')
+  }, [setFileData])
 
   return <React.Fragment>
     <h1>Oh Hi Mark</h1>
-    <Dropzone setFileData={setFileData} />
+    return <Dropzone onDrop={onDrop} />
     <DataTable tabularData={fileData} />
   </React.Fragment>
 }
