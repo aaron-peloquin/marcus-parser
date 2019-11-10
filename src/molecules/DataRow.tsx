@@ -24,10 +24,9 @@ const DataRow = ({ rowData }: React.FC<Props>) => {
   const [bigMoney, setBigMoney] = useState(localStorageLoad(id) || 0)
 
   const updateBigMoney = useCallback(e => {
-    console.log(e)
     const { value = 0 } = (e || {}).target
+
     localStorageSave(id, value, false)
-    console.log(value)
     setBigMoney(value)
   }, [setBigMoney, id])
 
