@@ -2,18 +2,18 @@ import React from 'react'
 
 import DataRow from './../molecules/DataRow'
 
-const DataTable = ({tabularData = []}) => {
+const DataTable = ({label="", tabularData = []}) => {
   if(!tabularData) {
     return <h2>Please upload your reservations json file</h2>
   }
 
-  return <table>
-    <caption>Rental Details</caption>
+  return <table border="1" style={{width: '100%'}}>
+    <caption>{label} Details</caption>
     <thead>
       <tr>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>Dryver</th>
+        <th>Distaence</th>
+        <th>Earn'ins</th>
       </tr>
     </thead>
     {tabularData.map(rowData => <DataRow rowData={rowData} />)}
