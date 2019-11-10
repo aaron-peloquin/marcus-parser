@@ -1,4 +1,11 @@
 const getMilesFromString = milesString => +milesString.replace(/[^\d.-]/g, '')
+
+const hashCode = s => {
+  for(var i = 0, h = 0; i < s.length; i++)
+      h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+  return h;
+}
+
 export const parseDatFile = (rawFileData = [], isHost=true) => rawFileData.map(eventData => {
   if (!isHost) {
     eventData = eventData.current
@@ -15,9 +22,10 @@ export const parseDatFile = (rawFileData = [], isHost=true) => rawFileData.map(e
   const datObject = {
     currentStartDate: eventDate.toLocaleString(),
     bigMoney: current,
-    protection_level,
     distanceDrove: -1,
     driverUrl: eventData[(isHost ? 'guest_url' : 'host_url')],
+    id: hashCode(reservation_url),
+    protection_level,
     reservationUrl: reservation_url,
     sketchyData: true,
     timestamp: eventDate.valueOf(),

@@ -12,15 +12,17 @@ const DataTable = ({label="", tabularData = []}) => {
     <thead>
       <tr>
         <th>Dayte</th>
-        <th>Dryver</th>
+        <th>Lynk</th>
         <th>Distaence</th>
         <th>Protection Level?</th>
         <th>Earn'ins</th>
       </tr>
     </thead>
-    {tabularData.map(rowData => <DataRow rowData={rowData} />)}
     <tbody>
-
+      {tabularData.map(rowData => {
+        const {id} = rowData
+        return <DataRow key={id} rowData={rowData} />
+      })}
     </tbody>
   </table>
 }
