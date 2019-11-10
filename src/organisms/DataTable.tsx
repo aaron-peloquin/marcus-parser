@@ -8,11 +8,13 @@ const DataTable = ({label="", tabularData = []}) => {
   }
 
   return <table border="1" style={{width: '100%'}}>
-    <caption>{label} Details</caption>
+    <caption>{label} Data Summary</caption>
     <thead>
       <tr>
+        <th>Dayte</th>
         <th>Dryver</th>
         <th>Distaence</th>
+        <th>Protection Level?</th>
         <th>Earn'ins</th>
       </tr>
     </thead>

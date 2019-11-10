@@ -1,21 +1,26 @@
 const getMilesFromString = milesString => +milesString.replace(/[^\d.-]/g, '')
-export const parseDatFile = (rawFileData = []) => rawFileData.map(eventData => {
+export const parseDatFile = (rawFileData = [], isHost=true) => rawFileData.map(eventData => {
+  if (!isHost) {
+    eventData = eventData.current
+  }
   const {
     reservation_check_in,
-    guest_url,
-    host_url,
-    protection_level,
-    reservation_state,
-  } = eventData
+    protection_level = 'Not Found',
+    reservation_state = {},
+    invoices: { current = [] } = {},
+    reservation_url,
+  } = eventData || {}
 
-  console.log('Aaron', eventData)
-
+  const eventDate = new Date(reservation_state.trip_start)
   const datObject = {
-    guest: guest_url,
-    host: host_url,
-    sketchyData: true,
+    currentStartDate: eventDate.toLocaleString(),
+    bigMoney: current,
+    protection_level,
     distanceDrove: -1,
-    currentStart: new Date(reservation_state.trip_start).toLocaleString()
+    driverUrl: eventData[(isHost ? 'guest_url' : 'host_url')],
+    reservationUrl: reservation_url,
+    sketchyData: true,
+    timestamp: eventDate.valueOf(),
   }
 
   const start = getMilesFromString(reservation_check_in.owner_check_in_odometer_reading)
