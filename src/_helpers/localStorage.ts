@@ -25,7 +25,7 @@ export const localStorageSave = (key, obj, showWarning=hasWindow) => {
  * @param {bool} showWarning Defaulted to if window is undefined, enables console.warn when true if we cannot save
  */
 
-export const localStorageLoad = (key, showWarning=hasWindow) => {
+export const localStorageLoad: any = (key, showWarning=hasWindow) => {
   let returnData = {}
   try {
     const localData = localStorage.getItem('mark-'+key)
