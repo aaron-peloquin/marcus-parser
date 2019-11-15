@@ -10,57 +10,66 @@ const TheSummaryAnalytics = ({ data }) => {
     const newValue = !fullRowsOnly
     localStorageSave(LOCAL_STORAGE_KEY, newValue, false)
     setFullRowsOnly(newValue)
-  })
+  }, [fullRowsOnly, setFullRowsOnly])
 
-  const displayData = {
-    countedRecords: 0,
-    averageMileage: -1,
-    averageRevenue: -1,
-  }
+  const getRevenue = useCallback(id => parseInt(localStorageLoad(id) )|| -1, [])
 
-  const getRevenue = useCallback(id => parseInt(localStorageLoad(id) )|| -1)
-
-  const parseFullRows = useMemo(() => {
-    data.map(({ distanceDrove, id }) => {
+  const parsedData = useMemo(() => {
+    const displayData = { countedRecords: 0, averageMileage: -1, averageRevenue: -1 }
+    const tempData = { distance: 0, revenue: 0 }
+    const tempCounts = { distance: 0, revenue: 0, tempData }
+      data.forEach(({ distanceDrove, id }) => {
       const revenue: number = getRevenue(id)
-      console.log({ AARON: revenue })
+      if(fullRowsOnly) {
+        if (distanceDrove && revenue) {
+          displayData.countedRecords++
+          tempCounts.distance++
+          tempData.distance += distanceDrove
+          tempCounts.revenue++
+          tempData.revenue += revenue
+        }
+      } else if(distanceDrove || revenue) {
+        displayData.countedRecords++
+        if (distanceDrove) {
+          tempCounts.distance++
+          tempData.distance += distanceDrove
+        }
+        if (revenue) {
+          tempCounts.revenue++
+          tempData.revenue += revenue
+        }
+      }
     })
+      displayData.averageMileage = +(tempData.distance / tempCounts.distance).toFixed(2)
+      displayData.averageRevenue = +(tempData.revenue / tempCounts.revenue).toFixed(2)
+      return displayData
+  }, [data, fullRowsOnly, getRevenue])
 
-  })
+  console.log({ data, parsedData })
 
-  const parseParitalRows = useMemo(() => {
-    data.map(({ distanceDrove, id }) => {
-      const revenue: number = getRevenue(id)
-      console.log({ AARON: revenue })
-    })
-  })
-
-  const parseData = useMemo(() => data.map(reservation => {
-    const { distanceDrove, id } = reservation
-    const revenue: number = localStorageLoad(id) || 0
-    const addValues = (partialOk=false) => {
-      displayData.countedRecords++
-      if(partialOk || distanceDrove) { displayData.averageMileage += distanceDrove }
-      if(partialOk || revenue) { displayData.averageRevenue += revenue }
-    }
-    if (fullRowsOnly && distanceDrove && revenue) { addValues() }
-    if (!fullRowsOnly && (distanceDrove || revenue)) { addValues(true) }
-  }), [data, fullRowsOnly])
-
-  console.log({ data, displayData })
-
-  return <React.Fragment>
-    <label>
-      <input type="checkbox" checked={fullRowsOnly} onChange={handleCheckbox} />
-      <span>Only calculate when 🛣️ <strong>&</strong> 💰</span> have values. Otherwise, calculate when either is present.
-    </label>
-    <table>
-      <caption>Analytitiks</caption>
-    <tr>
-      <td>#</td>
-      <td></td>
-      <td></td>
-    </tr>
+  return parsedData.countedRecords && <React.Fragment>
+    <table border="4" style={{width:'100%'}}>
+      <caption>
+        <h1>Analytitiks</h1>
+        <label>
+          <input type="checkbox" checked={fullRowsOnly} onChange={handleCheckbox} />
+          <span>Only calculate when <span role="img" aria-label="Mileage">🛣️</span> <strong>and</strong> <span role="img" aria-label="Revenue">💰</span> have values. Otherwise, calculate when either is present.</span>
+        </label>
+      </caption>
+      <thead>
+        <tr>
+          <td>#</td>
+          <td><span role="img" aria-label="Mileage">🛣️</span></td>
+          <td><span role="img" aria-label="Revenue">💰</span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{parsedData.countedRecords}</td>
+          <td>{parsedData.averageMileage}</td>
+          <td>{parsedData.averageRevenue}</td>
+        </tr>
+      </tbody>
   </table>
   </React.Fragment>
 }
