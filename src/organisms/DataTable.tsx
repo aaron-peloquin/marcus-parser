@@ -11,11 +11,10 @@ const DataTable = ({label="", tabularData = []}) => {
     <caption>{label} Data Summary</caption>
     <thead>
       <tr>
-        <th>Dayte</th>
-        <th>Lynk</th>
-        <th>Distaence</th>
-        <th>Protection Level?</th>
-        <th>Earn'ins</th>
+        <th><span role="img" aria-label="Date">📅</span></th>
+        <th><span role="img" aria-label="Reservation link">🔗</span></th>
+        <th><span role="img" aria-label="Distance">🛣️</span></th>
+        <th><span role="img" aria-label="Revenue">💰</span></th>
       </tr>
     </thead>
     <tbody>
