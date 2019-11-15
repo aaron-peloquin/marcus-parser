@@ -8,10 +8,11 @@ const HomeRoute = () => {
   const [numForcedRender, setNumForcedRender] = useState(0)
   const triggerNewRender = () => {
     const newNumberOfRenders = numForcedRender + 1
+    console.log({ newNumberOfRenders })
     setNumForcedRender(newNumberOfRenders)
   }
 
-  return <NewRenderContext.Provider value={triggerNewRender}>
+  return <NewRenderContext.Provider value={{numForcedRender, triggerNewRender}}>
     <HomeLayout />
   </NewRenderContext.Provider>
 }

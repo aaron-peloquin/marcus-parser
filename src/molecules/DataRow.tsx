@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 
 import { localStorageSave, localStorageLoad } from './../_helpers/localStorage'
+import { NewRenderContext } from './../pages/HomeRoute'
 
 interface Props {
   rowData: {
@@ -19,6 +20,7 @@ const DataRow = ({ rowData }: React.FC<Props>) => {
     distanceDrove,
     id,
   } = rowData || {}
+  const { triggerNewRender } = useContext(NewRenderContext)
 
   const [bigMoney, setBigMoney] = useState(localStorageLoad(id) || 0)
 
@@ -27,7 +29,8 @@ const DataRow = ({ rowData }: React.FC<Props>) => {
 
     localStorageSave(id, value, false)
     setBigMoney(value)
-  }, [setBigMoney, id])
+    triggerNewRender()
+  }, [id, setBigMoney, triggerNewRender])
 
   return <tr>
     <td>{currentStartDate}</td>

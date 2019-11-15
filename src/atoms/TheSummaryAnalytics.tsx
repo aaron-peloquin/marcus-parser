@@ -1,11 +1,14 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 
+import { NewRenderContext } from './../pages/HomeRoute'
 import { localStorageSave, localStorageLoad } from './../_helpers/localStorage'
 
 const LOCAL_STORAGE_KEY = 'full rows checkbox state'
 
 const TheSummaryAnalytics = ({ data }) => {
   const [fullRowsOnly, setFullRowsOnly] = useState(localStorageLoad(LOCAL_STORAGE_KEY) || false)
+  const { numForcedRender } = useContext(NewRenderContext)
+
   const handleCheckbox = useCallback(() => {
     const newValue = !fullRowsOnly
     localStorageSave(LOCAL_STORAGE_KEY, newValue, false)
@@ -43,7 +46,8 @@ const TheSummaryAnalytics = ({ data }) => {
       displayData.averageMileage = +(tempData.distance / tempCounts.distance).toFixed(2)
       displayData.averageRevenue = +(tempData.revenue / tempCounts.revenue).toFixed(2)
       return displayData
-  }, [data, fullRowsOnly, getRevenue])
+      // eslint-disable-next-line 
+  }, [data, fullRowsOnly, getRevenue, numForcedRender])
 
   console.log({ data, parsedData })
 
