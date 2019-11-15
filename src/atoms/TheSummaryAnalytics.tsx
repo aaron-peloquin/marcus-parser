@@ -21,14 +21,14 @@ const TheSummaryAnalytics = ({ data }) => {
       data.forEach(({ distanceDrove, id }) => {
       const revenue: number = getRevenue(id)
       if(fullRowsOnly) {
-        if (distanceDrove && revenue) {
+        if (distanceDrove > 0 && revenue > 0) {
           displayData.countedRecords++
           tempCounts.distance++
           tempData.distance += distanceDrove
           tempCounts.revenue++
           tempData.revenue += revenue
         }
-      } else if(distanceDrove || revenue) {
+      } else if(distanceDrove > 0 || revenue > 0) {
         displayData.countedRecords++
         if (distanceDrove) {
           tempCounts.distance++
@@ -47,31 +47,33 @@ const TheSummaryAnalytics = ({ data }) => {
 
   console.log({ data, parsedData })
 
-  return parsedData.countedRecords && <React.Fragment>
-    <table border="4" style={{width:'100%'}}>
-      <caption>
-        <h1>Analytitiks</h1>
-        <label>
-          <input type="checkbox" checked={fullRowsOnly} onChange={handleCheckbox} />
-          <span>Only calculate when <span role="img" aria-label="Mileage">🛣️</span> <strong>and</strong> <span role="img" aria-label="Revenue">💰</span> have values. Otherwise, calculate when either is present.</span>
-        </label>
-      </caption>
-      <thead>
-        <tr>
-          <td>#</td>
-          <td><span role="img" aria-label="Mileage">🛣️</span></td>
-          <td><span role="img" aria-label="Revenue">💰</span></td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{parsedData.countedRecords}</td>
-          <td>{parsedData.averageMileage}</td>
-          <td>{parsedData.averageRevenue}</td>
-        </tr>
-      </tbody>
-  </table>
-  </React.Fragment>
+  return parsedData.countedRecords === 0
+    ? <React.Fragment />
+    : <React.Fragment>
+        <table border="4" style={{width:'100%'}}>
+          <caption>
+            <h1>Analytitiks</h1>
+            <label>
+              <input type="checkbox" checked={fullRowsOnly} onChange={handleCheckbox} />
+              <span>Only calculate when <span role="img" aria-label="Mileage">🛣️</span> <strong>and</strong> <span role="img" aria-label="Revenue">💰</span> have values. Otherwise, calculate when either is present.</span>
+            </label>
+          </caption>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th><span role="img" aria-label="Mileage">🛣️</span></th>
+              <th><span role="img" aria-label="Revenue">💰</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{parsedData.countedRecords}</td>
+              <td>{parsedData.averageMileage}</td>
+              <td>{parsedData.averageRevenue}</td>
+            </tr>
+          </tbody>
+      </table>
+    </React.Fragment>
 }
 
 export default TheSummaryAnalytics
