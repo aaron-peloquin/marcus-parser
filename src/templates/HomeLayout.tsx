@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 
 import DataTable from './../organisms/DataTable'
+import TheSummaryAnalytics from './../atoms/TheSummaryAnalytics'
 import MarkDropZone from './../atoms/MarkDropZone'
 
-import {parseDatFile} from './../_helpers/parseDatFile'
+import { parseDatFile } from './../_helpers/parseDatFile'
 
 const HomeLayout = () => {
   const [fileData, setFileData] = useState({})
@@ -13,10 +14,10 @@ const HomeLayout = () => {
 
   return <React.Fragment>
     <MarkDropZone setFileData={setFileData} />
-    {/* <DataTable label="Traveler" tabularData={traveler} /> */}
+    <TheSummaryAnalytics data={host} />
     <DataTable label="Host" tabularData={host} />
-
-  </React.Fragment>
+    {/* <DataTable label="Traveler" tabularData={traveler} /> */}
+    </React.Fragment>
 }
 
 export default HomeLayout

@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 
 import { localStorageSave, localStorageLoad } from './../_helpers/localStorage'
+import { NewRenderContext } from './../pages/HomeRoute'
 
 interface Props {
   rowData: {
@@ -17,9 +18,9 @@ const DataRow = ({ rowData }: React.FC<Props>) => {
     currentStartDate,
     reservationUrl,
     distanceDrove,
-    protection_level,
     id,
   } = rowData || {}
+  const { triggerNewRender } = useContext(NewRenderContext)
 
   const [bigMoney, setBigMoney] = useState(localStorageLoad(id) || 0)
 
@@ -28,13 +29,13 @@ const DataRow = ({ rowData }: React.FC<Props>) => {
 
     localStorageSave(id, value, false)
     setBigMoney(value)
-  }, [setBigMoney, id])
+    triggerNewRender()
+  }, [id, setBigMoney, triggerNewRender])
 
   return <tr>
     <td>{currentStartDate}</td>
     <td><a href={reservationUrl}>{reservationUrl}</a></td>
     <td>{distanceDrove}</td>
-    <td>{protection_level}</td>
     <td><input value={bigMoney} type="number" onChange={updateBigMoney} /></td>
   </tr>
 }
